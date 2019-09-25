@@ -6,7 +6,7 @@ public:
 	Date(int year = 1900, int month = 1, int day = 1);
 	~Date();
 	Date(const Date& d);
-	void print();
+	void print() const;
 
 	Date& operator=(const Date& d);
 
@@ -20,8 +20,8 @@ public:
 	// d + 100
 	Date operator+(int day);
 	Date operator-(int day);
-	Date operator+=(int day);
-	Date operator-=(int day);
+	Date& operator+=(int day);
+	Date& operator-=(int day);
 	int operator-(const Date& d);
 
 	// ++d d.operator++(&d)

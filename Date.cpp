@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void Date::print()
+void Date::print()   const
 {
 	cout << _year << "-" << _month << "-" << _day << endl;
 }
@@ -49,7 +49,7 @@ Date::Date(const Date& d)
 
 Date& Date::operator=(const Date& d)
 {
-	if (this != &d)
+	if (this != &d)//防止自己给自己赋值
 	{
 		_year = d._year;
 		_month = d._month;
@@ -68,10 +68,11 @@ bool Date::operator>(const Date& d)
 
 bool Date::operator<(const Date& d)
 {
-	if (_year < d._year || _year == d._year && _month < d._month || _year == d._year && _month == d._month && _day < d._day)
+	/*if (_year < d._year || _year == d._year && _month < d._month || _year == d._year && _month == d._month && _day < d._day)
 		return true;
 	else
-		return false;
+		return false;*/
+	return !(*this >d);
 }
 
 bool Date::operator==(const Date& d)
@@ -81,29 +82,33 @@ bool Date::operator==(const Date& d)
 
 bool Date::operator!=(const Date& d)
 {
-	return _year != d._year || _month != d._month || _day != d._day;
+	/*return _year != d._year || _month != d._month || _day != d._day;*/
+	return !(*this == d);
 }
 
 bool Date::operator<=(const Date& d)
 {
-	if (_year > d._year || _year == d._year && _month > d._month || _year == d._year && _month == d._month && _day > d._day)
+	/*if (_year > d._year || _year == d._year && _month > d._month || _year == d._year && _month == d._month && _day > d._day)
 		return false;
 	else
-		return true;
+		return true;*/
+	return (*this < d) || (*this == d);
 }
 
 bool Date::operator>=(const Date& d)
 {
-	if (_year < d._year || _year == d._year && _month < d._month || _year == d._year && _month == d._month && _day < d._day)
+	/*if (_year < d._year || _year == d._year && _month < d._month || _year == d._year && _month == d._month && _day < d._day)
 		return false;
 	else
-		return true;
+		return true;*/
+	return (*this > d) || (*this == d);
 }
 
 Date Date::operator+(int day)
 {
 	Date x(*this);
-	x._day += day;
+	x += day;
+	/*x._day += day;
 	while (x._day > GetMonthDay(x._year, x._month))
 	{
 		x._day -= GetMonthDay(x._year, x._month);
@@ -111,14 +116,15 @@ Date Date::operator+(int day)
 			x._month = 1;
 		else
 			x._month++;
-	}
+	}*/
 	return x;
 }
 
 Date Date::operator-(int day)
 {
 	Date x(*this);
-	x._day -= day;
+	x -= day;
+	/*x._day -= day;
 	while (x._day < 0)
 	{
 		if (x._month == 1)
@@ -129,12 +135,16 @@ Date Date::operator-(int day)
 		else
 			x._month--;
 		x._day += GetMonthDay(x._year, x._month);
-	}
+	}*/
 	return x;
 }
 
-Date Date::operator+=(int day)
+Date& Date::operator+=(int day)
 {
+	if(day < 0)
+	{
+		return *this -= -day;
+	}
 	_day += day;
 	while (_day > GetMonthDay(_year, _month))
 	{
@@ -147,8 +157,12 @@ Date Date::operator+=(int day)
 	return *this;
 }
 
-Date Date::operator-=(int day)
+Date& Date::operator-=(int day)
 {
+	if (day < 0)
+	{
+		return *this += -day;
+	}
 	_day -= day;
 	while (_day < 0)
 	{
@@ -180,7 +194,7 @@ int Date::operator-(const Date& d)
 // ++d d.operator++(&d)
 Date Date::operator++()
 {
-	_day++;
+	/*_day++;
 	while (_day > GetMonthDay(_year, _month))
 	{
 		_day -= GetMonthDay(_year, _month);
@@ -189,6 +203,8 @@ Date Date::operator++()
 		else
 			_month++;
 	}
+	return *this;*/
+	*this += 1;
 	return *this;
 }
 
@@ -196,7 +212,7 @@ Date Date::operator++()
 Date Date::operator++(int)
 {
 	Date x(*this);
-	_day++;
+	/*_day++;
 	while (_day > GetMonthDay(_year, _month))
 	{
 		_day -= GetMonthDay(_year, _month);
@@ -204,6 +220,7 @@ Date Date::operator++(int)
 			_month = 1;
 		else
 			_month++;
-	}
+	}*/
+	*this += 1;
 	return x;
 }
